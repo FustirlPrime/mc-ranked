@@ -1,0 +1,143 @@
+
+<style>
+.outer {
+  background: #06000c;
+  padding: 52px 40px;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.logo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  gap: 0;
+}
+.lw { position: relative; display: inline-block; line-height: 1; }
+.base {
+  font-family: 'Arial Black', Impact, Arial, sans-serif;
+  font-size: 108px;
+  font-weight: 900;
+  letter-spacing: -3px;
+  display: inline-block;
+  line-height: 1;
+  font-style: italic;
+}
+
+/* QUARTZ: solid white base + hard shadow stack going upper-right */
+.qb {
+  color: #f6f2ea;
+  text-shadow:
+     1px -1px 0 #e8e4da,
+     2px -2px 0 #d8d4ca,
+     3px -3px 0 #c8c4ba,
+     4px -4px 0 #b8b4aa,
+     5px -5px 0 #a8a49a,
+     6px -6px 0 #98948a,
+     7px -7px 0 #88847a,
+     8px -8px 0 #78746a,
+     9px -9px 0 #68645a,
+    10px -10px 0 #585448,
+    11px -11px 0 #484438,
+    12px -12px 0 #383428,
+    13px -13px 0 #282418,
+    14px -14px 0 #18140a;
+}
+/* Crystal gradient overlay on front face */
+.qc {
+  position: absolute; top: 0; left: 0;
+  background: linear-gradient(155deg,
+    #ffffff   0%,
+    #faf6ee  12%,
+    #eeeadf  28%,
+    #d8d5cd  50%,
+    #c5c2bc  70%,
+    #b0ada8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  pointer-events: none;
+}
+
+/* AMETHYST: solid purple base + hard shadow stack */
+.ab {
+  color: #d870ff;
+  text-shadow:
+     1px -1px 0 #c860ef,
+     2px -2px 0 #b850df,
+     3px -3px 0 #a840cf,
+     4px -4px 0 #9830bf,
+     5px -5px 0 #8820af,
+     6px -6px 0 #78109f,
+     7px -7px 0 #68008f,
+     8px -8px 0 #58007e,
+     9px -9px 0 #48006e,
+    10px -10px 0 #38005e,
+    11px -11px 0 #28004e,
+    12px -12px 0 #18003e,
+    13px -13px 0 #0e002e,
+    14px -14px 0 #08001e;
+}
+/* Amethyst crystal gradient */
+.ac {
+  position: absolute; top: 0; left: 0;
+  background: linear-gradient(155deg,
+    #fce4ff   0%,
+    #ec9fff  12%,
+    #d870ff  28%,
+    #b848e8  50%,
+    #9020c8  72%,
+    #6808a8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  pointer-events: none;
+}
+</style>
+
+<div class="outer">
+
+<!-- Sparkles SVG -->
+<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- Quartz sparkles -->
+  <polygon points="28,55 31,68 28,81 25,68"  fill="#ffffff" opacity="0.85"/>
+  <polygon points="18,68 31,71 18,74 5,71"   fill="#ffffff" opacity="0.55"/>
+  <polygon points="60,22 62,31 60,40 58,31"  fill="#fffff0" opacity="0.75"/>
+  <polygon points="53,31 62,33 53,35 44,33"  fill="#ffffff" opacity="0.45"/>
+  <polygon points="42,108 44,116 42,124 40,116" fill="#f0ece2" opacity="0.6"/>
+  <polygon points="18,105 20,112 18,119 16,112" fill="#e8e4da" opacity="0.5"/>
+  <polygon points="75,148 77,154 75,160 73,154" fill="#ffffff" opacity="0.4"/>
+
+  <!-- Amethyst sparkles -->
+  <polygon points="640,42 643,55 640,68 637,55"  fill="#e080ff" opacity="0.9"/>
+  <polygon points="630,55 643,58 630,61 617,58"  fill="#c060ef" opacity="0.6"/>
+  <polygon points="665,18 667,27 665,36 663,27"  fill="#f0b0ff" opacity="0.8"/>
+  <polygon points="658,27 667,29 658,31 649,29"  fill="#d888ff" opacity="0.5"/>
+  <polygon points="620,110 622,118 620,126 618,118" fill="#c060ef" opacity="0.7"/>
+  <polygon points="612,118 622,120 612,122 602,120" fill="#a848d8" opacity="0.45"/>
+  <polygon points="680,80 682,88 680,96 678,88"  fill="#d878ff" opacity="0.6"/>
+  <polygon points="648,155 650,162 648,169 646,162" fill="#b850e8" opacity="0.5"/>
+
+  <!-- Subtle crystal facet lines in background -->
+  <line x1="50" y1="0" x2="90" y2="220" stroke="white" stroke-width="0.5" opacity="0.04"/>
+  <line x1="120" y1="0" x2="80" y2="220" stroke="white" stroke-width="0.5" opacity="0.03"/>
+  <line x1="580" y1="0" x2="620" y2="220" stroke="#c060ff" stroke-width="0.5" opacity="0.05"/>
+  <line x1="640" y1="0" x2="600" y2="220" stroke="#c060ff" stroke-width="0.5" opacity="0.04"/>
+</svg>
+
+<div class="logo-row">
+  <!-- MC in QUARTZ -->
+  <div class="lw">
+    <span class="base qb">MC</span>
+    <span class="base qc">MC</span>
+  </div>
+  <!-- RANKED in AMETHYST -->
+  <div class="lw">
+    <span class="base ab">RANKED</span>
+    <span class="base ac">RANKED</span>
+  </div>
+</div>
+
+</div>

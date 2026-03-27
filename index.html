@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCRANKED - Rankings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="brand" style="text-align: center; margin-bottom: 0.5rem;">
+                <div class="logo-3d">
+                    <div class="lw"><span class="base qb">MC</span><span class="base qc">MC</span></div>
+                    <div class="lw"><span class="base ab">RANKED</span><span class="base ac">RANKED</span></div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <h3 class="nav-group-title">Leaderboards</h3>
+                    <ul id="category-list">
+                        <!-- Instantiated by JS -->
+                    </ul>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div id="auth-section" class="auth-section">
+                    <button id="btn-login-modal" class="btn btn-secondary">Login</button>
+                    <button id="btn-register-modal" class="btn btn-primary">Register</button>
+                </div>
+                
+                <div id="user-section" class="user-section" style="display: none;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem;">
+                        <img id="current-user-avatar" src="" alt="Avatar" style="width: 40px; height: 40px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 4px 10px rgba(0,0,0,0.3);" onerror="this.src='https://mc-heads.net/avatar/Steve/40'">
+                        <div>
+                            <p class="logged-in-as" style="margin-bottom:0;">Logged in as:</p>
+                            <span id="current-username" class="logo-accent fw-bold" style="font-size: 1.1rem">User</span>
+                        </div>
+                    </div>
+                    <button id="btn-logout" class="btn btn-danger full-width">Logout</button>
+                </div>
+
+                <div id="user-actions" style="margin-top: 0.5rem; display: none; flex-direction: column; gap: 0.5rem;">
+                    <button id="btn-request-modal" class="btn btn-primary full-width">📄 Request Rank</button>
+                </div>
+
+                <div id="admin-actions" style="margin-top: 0.5rem; display: none; flex-direction: column; gap: 0.5rem;">
+                    <button id="btn-inbox-modal" class="btn btn-success full-width">📥 Inbox <span id="inbox-badge" class="badge">0</span></button>
+                </div>
+                
+                <a href="#home" class="footer-link" style="margin-top: 1rem;">Home</a>
+                <a href="#docs" class="footer-link">API Docs</a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1 id="page-title">Overall Rankings</h1>
+                <p class="page-subtitle">The top players in the selected category.</p>
+                <div class="header-controls">
+                    <div class="search-bar">
+                        <input type="text" id="player-search" placeholder="Search for a player...">
+                    </div>
+                </div>
+                
+                <!-- Admin Panel (Hidden by default) -->
+                <div id="admin-panel" class="admin-panel" style="display: none;">
+                    <h3><span class="logo-accent">Admin Console:</span> Add Player Rank</h3>
+                    <form id="add-rank-form" class="admin-form">
+                        <input type="text" id="admin-player-name" placeholder="Player Name (e.g., Technoblade)" required>
+                        <select id="admin-category" required>
+                            <!-- Populated in JS dynamically to match CATEGORIES -->
+                        </select>
+                        <select id="admin-tier" required>
+                            <option value="1">High Tier 1</option>
+                            <option value="2">High Tier 2</option>
+                            <option value="3">High Tier 3</option>
+                            <option value="4">High Tier 4</option>
+                            <option value="5">High Tier 5</option>
+                        </select>
+                        <select id="admin-region" required>
+                            <option value="NA">NA - North America</option>
+                            <option value="EU">EU - Europe</option>
+                            <option value="AS">AS - Asia</option>
+                            <option value="SA">SA - South America</option>
+                        </select>
+                        <input type="number" id="admin-score" placeholder="Score (e.g., 5000)" required>
+                        <button type="submit" class="btn btn-primary">Add/Update Player</button>
+                    </form>
+                </div>
+            </header>
+
+            <div id="ranking-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <!-- Populated by JS -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal" id="close-auth-modal">&times;</span>
+            <h2 id="modal-title">Login</h2>
+            <form id="auth-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <p id="auth-error" class="error-text"></p>
+                <button type="submit" id="auth-submit" class="btn btn-primary full-width modal-btn">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Request Rank Modal -->
+    <div id="request-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal" id="close-request-modal">&times;</span>
+            <h2>Submit a Rank Ticket</h2>
+            <form id="request-form">
+                <div class="form-group">
+                    <label>Minecraft Player IGN</label>
+                    <input type="text" id="req-player-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="req-category" required></select>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Proposed Tier</label>
+                        <select id="req-tier" required>
+                            <option value="1">High Tier 1</option>
+                            <option value="2">High Tier 2</option>
+                            <option value="3">High Tier 3</option>
+                            <option value="4">High Tier 4</option>
+                            <option value="5">High Tier 5</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>Estimated Score</label>
+                        <input type="number" id="req-score" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Proof / Evidence (VOD/Screenshot Link optional)</label>
+                    <input type="text" id="req-proof" placeholder="https://youtube.com/...">
+                </div>
+                <p id="req-error" class="error-text"></p>
+                <button type="submit" class="btn btn-primary full-width modal-btn">Submit Ticket to Admins</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Inbox Modal -->
+    <div id="inbox-modal" class="modal large">
+        <div class="modal-content glass-panel">
+            <span class="close-modal" id="close-inbox-modal">&times;</span>
+            <h2 style="display: flex; align-items: center; gap: 1rem;">
+                Ticket Inbox 
+                <button id="btn-refresh-inbox" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">Refresh</button>
+            </h2>
+            <div class="ticket-list" id="ticket-list-container">
+                <!-- Javascript will populate tickets here -->
+                <p style="color: var(--text-muted);">Loading tickets...</p>
+            </div>
+            <p id="inbox-error" class="error-text" style="margin-top: 1rem;"></p>
+        </div>
+    </div>
+
+
+    <!-- Script loading -->
+    <script src="script.js"></script>
+</body>
+</html>
