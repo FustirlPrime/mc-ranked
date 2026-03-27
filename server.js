@@ -72,10 +72,26 @@ app.get('/api/data', async (req, res) => {
     try {
         const ranks = await Ranking.find().lean();
         const result = {};
+        const playerScores = {}; // Map name -> aggregated profile
+        
         ranks.forEach(r => {
-            if (!result[r.category]) result[r.category] = [];
-            result[r.category].push({ name: r.name, tier: r.tier, score: r.score, region: r.region });
+            if (r.category !== 'overall') {
+                if (!result[r.category]) result[r.category] = [];
+                result[r.category].push({ name: r.name, tier: r.tier, score: r.score, region: r.region });
+                
+                const lowerName = r.name.toLowerCase();
+                if (!playerScores[lowerName]) {
+                    playerScores[lowerName] = { name: r.name, score: 0, region: r.region };
+                }
+                playerScores[lowerName].score += r.score;
+            }
         });
+        
+        // Auto-generate overall category
+        result['overall'] = Object.values(playerScores).map(p => ({
+            name: p.name, tier: 'HT1', score: p.score, region: p.region
+        }));
+        
         Object.keys(result).forEach(cat => result[cat].sort((a, b) => b.score - a.score));
         res.json(result);
     } catch(e) { res.status(500).json({ error: "Database Error" }); }
@@ -113,6 +129,7 @@ app.post('/api/rankings', async (req, res) => {
 
     const { category, playerName, tier, score, region } = req.body;
     if (!category || !playerName || !tier || isNaN(score)) return res.status(400).json({ error: "Invalid data provided" });
+    if (category === 'overall') return res.status(400).json({ error: "Overall is auto-calculated" });
 
     try {
         await Ranking.findOneAndUpdate(
@@ -124,10 +141,24 @@ app.post('/api/rankings', async (req, res) => {
         // Re-fetch all
         const ranks = await Ranking.find().lean();
         const result = {};
+        const playerScores = {};
         ranks.forEach(r => {
-            if (!result[r.category]) result[r.category] = [];
-            result[r.category].push({ name: r.name, tier: r.tier, score: r.score, region: r.region });
+            if (r.category !== 'overall') {
+                if (!result[r.category]) result[r.category] = [];
+                result[r.category].push({ name: r.name, tier: r.tier, score: r.score, region: r.region });
+                
+                const lowerName = r.name.toLowerCase();
+                if (!playerScores[lowerName]) {
+                    playerScores[lowerName] = { name: r.name, score: 0, region: r.region };
+                }
+                playerScores[lowerName].score += r.score;
+            }
         });
+        
+        result['overall'] = Object.values(playerScores).map(p => ({
+            name: p.name, tier: 'HT1', score: p.score, region: p.region
+        }));
+        
         Object.keys(result).forEach(cat => result[cat].sort((a, b) => b.score - a.score));
         res.json({ success: true, rankings: result });
     } catch(e) { res.status(500).json({ error: "Database Error" }); }

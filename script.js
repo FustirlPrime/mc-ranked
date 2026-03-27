@@ -182,9 +182,10 @@ function populateCategoryDropdowns() {
     adminCategorySelect.innerHTML = '';
     reqCategorySelect.innerHTML = '';
     CATEGORIES.forEach(cat => {
-        const op = `<option value="${cat.id}">${cat.name}</option>`;
-        adminCategorySelect.innerHTML += op;
-        reqCategorySelect.innerHTML += op;
+        if (cat.id !== 'overall') {
+            adminCategorySelect.add(new Option(cat.name, cat.id));
+            reqCategorySelect.add(new Option(cat.name, cat.id));
+        }
     });
 }
 
@@ -394,17 +395,21 @@ function renderTable(categoryId, searchTerm = '') {
         const rankClass = index < 3 ? `rank-${index + 1}` : 'rank-other';
         const region = player.region || 'NA';
         
-        let miniBadgesHtml = getPlayerCrossCategories(player.name).map(cross => {
-            const rawTier = cross.tier ? cross.tier.toString() : 'HT1';
-            const tierName = (rawTier.toUpperCase().startsWith('HT') || rawTier.toUpperCase().startsWith('LT')) ? rawTier : `HT${rawTier}`;
-            const tierLevel = tierName.slice(-1);
-            return `
-            <div class="mini-badge">
-                <img src="assets/${cross.category}.svg" title="${CATEGORIES.find(c => c.id===cross.category)?.name || cross.category}">
-                <span class="mini-tier t${tierLevel}">${tierName}</span>
-            </div>
-            `;
-        }).join('');
+        let miniBadgesHtml = '';
+        
+        if (categoryId === 'overall') {
+            miniBadgesHtml = getPlayerCrossCategories(player.name).map(cross => {
+                const rawTier = cross.tier ? cross.tier.toString() : 'HT1';
+                const tierName = (rawTier.toUpperCase().startsWith('HT') || rawTier.toUpperCase().startsWith('LT')) ? rawTier : `HT${rawTier}`;
+                const tierLevel = tierName.slice(-1);
+                return `
+                <div class="mini-badge">
+                    <img src="assets/${cross.category}.svg" title="${CATEGORIES.find(c => c.id===cross.category)?.name || cross.category}">
+                    <span class="mini-tier t${tierLevel}">${tierName}</span>
+                </div>
+                `;
+            }).join('');
+        }
 
         const card = document.createElement('div');
         card.className = 'player-card';

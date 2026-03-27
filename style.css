@@ -207,16 +207,28 @@ body {
 .region-badge.AS { background: rgba(147, 51, 234, 0.2); border: 1px solid rgba(147, 51, 234, 0.4); color: #d8b4fe; }
 .region-badge.SA { background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); color: #93c5fd; }
 
-/* Mini Badges Right Side */
+/* Mini Badges */
 .mini-badges {
-    display: flex; align-items: center; gap: 0.75rem; padding-right: 1.5rem; justify-content: flex-end;
-    min-width: 300px;
+    display: flex; gap: 0.6rem; margin-left: auto; align-items: center;
 }
-.mini-badge {
-    display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+.mini-badge { 
+    position: relative;
+    width: 36px; height: 36px;
+    background: #111116; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
 }
-.mini-badge img { width: 20px; height: 20px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.8)); object-fit: contain; }
-.mini-tier { font-size: 0.65rem; font-weight: 900; }
+.mini-badge img { 
+    width: 22px; height: 22px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); 
+}
+.mini-tier {
+    position: absolute; bottom: -8px;
+    font-size: 0.55rem; font-weight: 900;
+    padding: 0.15rem 0.35rem; border-radius: 10px;
+    background: #222; border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 2;
+}
 .mini-tier.t1 { color: var(--tier-1); text-shadow: 0 0 5px var(--tier-1); }
 .mini-tier.t2 { color: var(--tier-2); text-shadow: 0 0 5px var(--tier-2); }
 .mini-tier.t3 { color: var(--tier-3); text-shadow: 0 0 5px var(--tier-3); }
