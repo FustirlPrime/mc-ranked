@@ -371,6 +371,7 @@ function getCombatTitle(score) {
 function getPlayerCrossCategories(playerName) {
     let cross = [];
     Object.keys(rankingsDB).forEach(catId => {
+        if (catId === 'overall') return;
         const p = rankingsDB[catId].find(x => x.name.toLowerCase() === playerName.toLowerCase());
         if (p) {
             cross.push({ category: catId, tier: p.tier });
@@ -394,8 +395,9 @@ function renderTable(categoryId, searchTerm = '') {
         const title = getCombatTitle(player.score);
         const rankClass = index < 3 ? `rank-${index + 1}` : 'rank-other';
         const region = player.region || 'NA';
-        
+        const avatarUrl = `https://mc-heads.net/body/${encodeURIComponent(player.name)}/60`;
         let miniBadgesHtml = '';
+        let singularTierHtml = '';
         
         if (categoryId === 'overall') {
             miniBadgesHtml = getPlayerCrossCategories(player.name).map(cross => {
@@ -409,24 +411,36 @@ function renderTable(categoryId, searchTerm = '') {
                 </div>
                 `;
             }).join('');
+        } else {
+            const rawTier = player.tier ? player.tier.toString() : 'HT1';
+            const tierName = (rawTier.toUpperCase().startsWith('HT') || rawTier.toUpperCase().startsWith('LT')) ? rawTier.toUpperCase() : `HT${rawTier}`;
+            const tierLevel = tierName.slice(-1);
+            singularTierHtml = `<span class="category-tier t${tierLevel}">${tierName}</span>`;
         }
 
         const card = document.createElement('div');
         card.className = 'player-card';
         card.innerHTML = `
             <div class="rank-box ${rankClass}">${index + 1}.</div>
+            
             <div class="card-avatar">
-                <img src="https://mc-heads.net/body/${encodeURIComponent(player.name)}/60" onerror="this.src='https://mc-heads.net/avatar/Steve/60'">
+                <img src="${avatarUrl}" alt="${player.name}" onerror="this.src='https://crafatar.com/renders/body/8667ba71b85a4004af54457a9734eed7?overlay=true'">
             </div>
+            
             <div class="card-info">
                 <div class="card-name">${player.name}</div>
                 <div class="card-title">
-                    <img src="assets/overall.svg" class="title-icon"> ${title} <span class="points-text">(${player.score} points)</span>
+                    <img src="assets/${categoryId}.svg" class="title-icon" onerror="this.src='assets/overall.svg'"> ${title} <span class="points-text">(${player.score} points)</span>
                 </div>
             </div>
-            <div class="region-badge ${region}">${region}</div>
+            
             <div class="mini-badges">
                 ${miniBadgesHtml}
+            </div>
+
+            <div class="card-region">
+                ${singularTierHtml}
+                <span class="region-badge ${region}">${region}</span>
             </div>
         `;
         rankingListEl.appendChild(card);
