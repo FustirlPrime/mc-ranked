@@ -21,7 +21,7 @@ const User = mongoose.model('User', UserSchema);
 const RankingSchema = new mongoose.Schema({
     category: { type: String, required: true },
     name: { type: String, required: true },
-    tier: { type: Number, required: true },
+    tier: { type: String, required: true },
     score: { type: Number, required: true },
     region: { type: String, default: 'NA' }
 });
@@ -32,7 +32,7 @@ const TicketSchema = new mongoose.Schema({
     username: String,
     playerName: String,
     category: String,
-    tier: Number,
+    tier: String,
     score: Number,
     proof: String
 });
@@ -112,12 +112,12 @@ app.post('/api/rankings', async (req, res) => {
     if (token !== 'Randomified') return res.status(403).json({ error: "Unauthorized. Admin only." });
 
     const { category, playerName, tier, score, region } = req.body;
-    if (!category || !playerName || isNaN(tier) || isNaN(score)) return res.status(400).json({ error: "Invalid data provided" });
+    if (!category || !playerName || !tier || isNaN(score)) return res.status(400).json({ error: "Invalid data provided" });
 
     try {
         await Ranking.findOneAndUpdate(
             { category, name: { $regex: new RegExp(`^${playerName}$`, 'i') } },
-            { category, name: playerName, tier: parseInt(tier), score: parseInt(score), region: region || 'NA' },
+            { category, name: playerName, tier, score: parseInt(score), region: region || 'NA' },
             { upsert: true, new: true }
         );
         
@@ -148,13 +148,13 @@ app.post('/api/tickets', async (req, res) => {
     if (!token) return res.status(403).json({ error: "Must be logged in" });
 
     const { playerName, category, tier, score, proof } = req.body;
-    if (!playerName || !category || isNaN(tier) || isNaN(score)) return res.status(400).json({ error: "Missing required fields" });
+    if (!playerName || !category || !tier || isNaN(score)) return res.status(400).json({ error: "Missing required fields" });
 
     try {
         await Ticket.create({
             id: Date.now().toString() + Math.floor(Math.random() * 1000),
             username: token,
-            playerName, category, tier: parseInt(tier), score: parseInt(score), proof: proof || ''
+            playerName, category, tier, score: parseInt(score), proof: proof || ''
         });
         res.json({ success: true });
     } catch(e) { res.status(500).json({ error: "Database Error" }); }

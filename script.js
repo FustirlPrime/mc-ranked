@@ -314,7 +314,7 @@ document.getElementById('add-rank-form').addEventListener('submit', async (e) =>
     
     const playerName = document.getElementById('admin-player-name').value.trim();
     const catId = adminCategorySelect.value;
-    const tier = parseInt(document.getElementById('admin-tier').value);
+    const tier = document.getElementById('admin-tier').value;
     const score = parseInt(document.getElementById('admin-score').value);
     const region = adminRegionSelect.value;
     
@@ -394,12 +394,17 @@ function renderTable(categoryId, searchTerm = '') {
         const rankClass = index < 3 ? `rank-${index + 1}` : 'rank-other';
         const region = player.region || 'NA';
         
-        let miniBadgesHtml = getPlayerCrossCategories(player.name).map(cross => `
+        let miniBadgesHtml = getPlayerCrossCategories(player.name).map(cross => {
+            const rawTier = cross.tier ? cross.tier.toString() : 'HT1';
+            const tierName = (rawTier.toUpperCase().startsWith('HT') || rawTier.toUpperCase().startsWith('LT')) ? rawTier : `HT${rawTier}`;
+            const tierLevel = tierName.slice(-1);
+            return `
             <div class="mini-badge">
                 <img src="assets/${cross.category}.svg" title="${CATEGORIES.find(c => c.id===cross.category)?.name || cross.category}">
-                <span class="mini-tier t${cross.tier}">HT${cross.tier}</span>
+                <span class="mini-tier t${tierLevel}">${tierName}</span>
             </div>
-        `).join('');
+            `;
+        }).join('');
 
         const card = document.createElement('div');
         card.className = 'player-card';

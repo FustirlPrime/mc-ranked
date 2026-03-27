@@ -183,9 +183,9 @@ body {
 /* 3D Halfbody Avatar */
 .card-avatar {
     width: 80px; height: 100%; position: relative; margin-left: -50px; z-index: 5;
-    display: flex; align-items: flex-end; justify-content: center;
+    display: flex; align-items: flex-start; justify-content: center;
 }
-.card-avatar img { width: 60px; height: 95px; object-fit: cover; object-position: bottom; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.6)); pointer-events: none; }
+.card-avatar img { width: 60px; height: 95px; object-fit: cover; object-position: top; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.6)); pointer-events: none; margin-top: 5px; }
 
 /* Player Name & Title Info */
 .card-info {
