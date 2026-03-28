@@ -31,10 +31,9 @@ const TicketSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
     username: String,
     playerName: String,
+    discord: String,
     category: String,
-    tier: String,
-    score: Number,
-    proof: String
+    createdAt: { type: Date, default: Date.now }
 });
 const Ticket = mongoose.model('Ticket', TicketSchema);
 
@@ -178,14 +177,14 @@ app.post('/api/tickets', async (req, res) => {
     const token = req.headers['authorization'];
     if (!token) return res.status(403).json({ error: "Must be logged in" });
 
-    const { playerName, category, tier, score, proof } = req.body;
-    if (!playerName || !category || !tier || isNaN(score)) return res.status(400).json({ error: "Missing required fields" });
+    const { playerName, discord, category } = req.body;
+    if (!playerName || !discord || !category) return res.status(400).json({ error: "Missing required fields" });
 
     try {
         await Ticket.create({
             id: Date.now().toString() + Math.floor(Math.random() * 1000),
             username: token,
-            playerName, category, tier, score: parseInt(score), proof: proof || ''
+            playerName, discord, category
         });
         res.json({ success: true });
     } catch(e) { res.status(500).json({ error: "Database Error" }); }

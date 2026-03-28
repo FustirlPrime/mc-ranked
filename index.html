@@ -132,43 +132,23 @@
     <div id="request-modal" class="modal">
         <div class="modal-content glass-panel">
             <span class="close-modal" id="close-request-modal">&times;</span>
-            <h2>Submit a Rank Ticket</h2>
+            <h2>Request a Live Ranking Session</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">An admin will contact you on Discord to schedule a 1v1 fight to determine your rank on the leaderboard.</p>
             <form id="request-form">
                 <div class="form-group">
                     <label>Minecraft Player IGN</label>
-                    <input type="text" id="req-player-name" required>
+                    <input type="text" id="req-player-name" placeholder="e.g. Technoblade" required>
                 </div>
                 <div class="form-group">
-                    <label>Category</label>
+                    <label>Discord Username</label>
+                    <input type="text" id="req-discord" placeholder="e.g. yourname#1234" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label>Type of Fight (Category)</label>
                     <select id="req-category" required></select>
                 </div>
-                <div style="display: flex; gap: 1rem;">
-                    <div class="form-group" style="flex:1;">
-                        <label>Proposed Tier</label>
-                        <select id="req-tier" required>
-                            <option value="HT1">High Tier 1 (HT1)</option>
-                            <option value="HT2">High Tier 2 (HT2)</option>
-                            <option value="HT3">High Tier 3 (HT3)</option>
-                            <option value="HT4">High Tier 4 (HT4)</option>
-                            <option value="HT5">High Tier 5 (HT5)</option>
-                            <option value="LT1">Low Tier 1 (LT1)</option>
-                            <option value="LT2">Low Tier 2 (LT2)</option>
-                            <option value="LT3">Low Tier 3 (LT3)</option>
-                            <option value="LT4">Low Tier 4 (LT4)</option>
-                            <option value="LT5">Low Tier 5 (LT5)</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label>Estimated Score</label>
-                        <input type="number" id="req-score" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Proof / Evidence (VOD/Screenshot Link optional)</label>
-                    <input type="text" id="req-proof" placeholder="https://youtube.com/...">
-                </div>
                 <p id="req-error" class="error-text"></p>
-                <button type="submit" class="btn btn-primary full-width modal-btn">Submit Ticket to Admins</button>
+                <button type="submit" class="btn btn-primary full-width modal-btn">Submit Session Request</button>
             </form>
         </div>
     </div>

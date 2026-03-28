@@ -13,11 +13,6 @@ const CATEGORIES = [
     { id: 'mace', name: 'Mace' }
 ];
 
-const TITLES = [
-    "Combat Apprentice", "Combat Pawn", "Combat Soldier", "Combat Knight",
-    "Combat Elite", "Combat Master", "Combat Champion", "Combat Legend", "Combat Deity"
-];
-
 const ADMIN_USERNAME = "Randomified";
 
 let currentCategory = 'overall';
@@ -91,6 +86,36 @@ async function fetchRankings() {
 }
 
 // --- UI Updates ---
+function getCombatTitle(points) {
+    const titles = [
+        'Combat Apprentice',  // 0-99
+        'Combat Novice',      // 100
+        'Combat Soldier',     // 200
+        'Combat Mercenary',   // 300
+        'Combat Warrior',     // 400
+        'Combat Veteran',     // 500
+        'Combat Knight',      // 600
+        'Combat Elite',       // 700
+        'Combat Vanguard',    // 800
+        'Combat Commander',   // 900
+        'Combat General',     // 1000
+        'Combat Warlord',     // 1100
+        'Combat Master',      // 1200
+        'Combat Grandmaster', // 1300
+        'Combat Champion',    // 1400
+        'Combat Hero',        // 1500
+        'Combat Legend',      // 1600
+        'Combat Mythic',      // 1700
+        'Combat Ascendant',   // 1800
+        'Combat Sentinel',    // 1900
+        'Combat Paragon',     // 2000
+        'Combat Immortal',    // 2100
+        'Combat Deity'        // 2200+
+    ];
+    let index = Math.floor(points / 100);
+    if (index >= titles.length) index = titles.length - 1;
+    return titles[index];
+}
 function updateAuthUI() {
     if (currentUser) {
         authSection.style.display = 'none';
@@ -193,10 +218,8 @@ function populateCategoryDropdowns() {
 document.getElementById('request-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const playerName = document.getElementById('req-player-name').value.trim();
+    const discord = document.getElementById('req-discord').value.trim();
     const category = document.getElementById('req-category').value;
-    const tier = document.getElementById('req-tier').value;
-    const score = document.getElementById('req-score').value;
-    const proof = document.getElementById('req-proof').value;
     const errEl = document.getElementById('req-error');
     
     const btn = e.target.querySelector('button[type="submit"]');
@@ -206,11 +229,11 @@ document.getElementById('request-form').addEventListener('submit', async (e) => 
         const res = await fetch('/api/tickets', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': currentUser },
-            body: JSON.stringify({ playerName, category, tier, score, proof })
+            body: JSON.stringify({ playerName, discord, category })
         });
         const data = await res.json();
         if(res.ok) {
-            alert('Ticket Successfully Submitted!');
+            alert('Session Request Successfully Submitted!');
             hideModals();
             e.target.reset(); // clear form
         } else {
@@ -219,7 +242,7 @@ document.getElementById('request-form').addEventListener('submit', async (e) => 
     } catch (e) {
         errEl.textContent = "Network error.";
     } finally {
-        btn.textContent = 'Submit Ticket to Admins';
+        btn.textContent = 'Submit Session Request';
     }
 });
 
@@ -254,17 +277,17 @@ async function fetchAndRenderInbox() {
             div.className = 'ticket-card';
             div.innerHTML = `
                 <div class="ticket-info">
-                    <h4>
-                        <img src="https://mc-heads.net/avatar/${encodeURIComponent(t.playerName)}/24" style="border-radius:4px;">
+                    <h4 style="margin-bottom: 0.25rem;">
+                        <img src="https://mc-heads.net/avatar/${encodeURIComponent(t.playerName)}/24" style="border-radius:4px; margin-right: 0.5rem; vertical-align: middle;">
                         ${t.playerName}
                     </h4>
+                    <p><strong>Discord:</strong> <span style="color:var(--brand-accent);">${t.discord}</span></p>
                     <p><strong>Submitter:</strong> ${t.username}</p>
-                    <p><strong>Category:</strong> ${catName} — <strong>Proposed HT${t.tier}</strong> [${t.score}]</p>
-                    ${t.proof ? `<p><strong>Proof:</strong> <a href="${t.proof}" target="_blank" style="color:var(--brand-accent-hover)">Link</a></p>` : ''}
+                    <p><strong>Fight Type:</strong> ${catName}</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Fight player, then add them manually using the Add Player Rank panel.</p>
                 </div>
                 <div class="ticket-actions">
-                    <button class="btn btn-success" onclick="approveTicket('${t.id}', '${t.playerName}', '${t.category}', ${t.tier}, ${t.score})">Approve</button>
-                    <button class="btn btn-danger" onclick="denyTicket('${t.id}')">Deny / Delete</button>
+                    <button class="btn btn-success" onclick="denyTicket('${t.id}', false)">Mark Complete / Dismiss</button>
                 </div>
             `;
             ticketListContainer.appendChild(div);
@@ -273,26 +296,6 @@ async function fetchAndRenderInbox() {
         ticketListContainer.innerHTML = '<p class="error-text">Failed to fetch tickets.</p>';
     }
 }
-
-// Attach these to global window so innerHTML onclick string can hit them
-window.approveTicket = async (id, playerName, category, tier, score) => {
-    if(!confirm(`Approve ${playerName} into ${category} at Tier ${tier}?`)) return;
-    try {
-        // First inject rank
-        const res = await fetch('/api/rankings', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': currentUser },
-            body: JSON.stringify({ playerName, category, tier, score })
-        });
-        if(res.ok) {
-            rankingsDB = (await res.json()).rankings;
-            renderTable(currentCategory);
-            // Then delete ticket
-            await denyTicket(id, true);
-            alert(`${playerName} was successfully approved and added to leaderboards!`);
-        } else alert("Failed to add rank manually.");
-    } catch(e) { alert("Network error"); }
-};
 
 window.denyTicket = async (id, silent=false) => {
     if(!silent) {
@@ -361,11 +364,6 @@ function renderSidebar() {
         });
         categoryListEl.appendChild(li);
     });
-}
-
-function getCombatTitle(score) {
-    const idx = Math.min(Math.floor(score / 50), TITLES.length - 1);
-    return TITLES[idx] || "Unranked";
 }
 
 function getPlayerCrossCategories(playerName) {
