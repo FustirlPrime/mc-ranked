@@ -51,7 +51,24 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-.app-container { display: flex; min-height: 100vh; }
+/* Floating Live Orbs */
+.glow-orb {
+    position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0;
+    opacity: 0.35; mix-blend-mode: screen;
+    animation: orbFloat 25s ease-in-out infinite alternate;
+}
+.orb-1 { width: 500px; height: 500px; background: #9d4edd; top: -100px; left: -100px; }
+.orb-2 { width: 400px; height: 400px; background: #0088ff; bottom: -50px; right: 5%; animation-delay: -5s; animation-duration: 30s; }
+.orb-3 { width: 350px; height: 350px; background: #ff003c; top: 30%; left: 30%; animation-delay: -12s; animation-duration: 20s; }
+
+@keyframes orbFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(10vw, 15vh) scale(1.1); }
+    66% { transform: translate(-5vw, 25vh) scale(0.9); }
+    100% { transform: translate(15vw, -10vh) scale(1.05); }
+}
+
+.app-container { display: flex; min-height: 100vh; position: relative; z-index: 1; }
 .fw-bold { font-weight: 700; }
 
 /* 3D Crystalline Logo */
@@ -61,10 +78,16 @@ body {
     filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(216, 112, 255, 0.2));
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s ease;
     cursor: pointer;
+    animation: logoDrift 6s ease-in-out infinite alternate;
+}
+@keyframes logoDrift {
+    from { transform: translateY(-2px) rotate(0.5deg); }
+    to { transform: translateY(2px) rotate(-0.5deg); }
 }
 .logo-3d:hover {
-    transform: translateY(-3px) scale(1.02) rotate(-1deg);
+    transform: translateY(-5px) scale(1.05) rotate(-2deg);
     filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6)) drop-shadow(0 0 25px rgba(216, 112, 255, 0.5));
+    animation-play-state: paused;
 }
 .lw { position: relative; display: inline-block; line-height: 1; margin-right: 2px; }
 .base { 
@@ -146,9 +169,23 @@ body {
 .logged-in-as { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
 
 /* Main Area */
-.main-content { flex: 1; padding: 3rem 4rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+.main-content { flex: 1; padding: 3rem 4rem; max-width: 1400px; margin: 0 auto; width: 100%; position: relative; z-index: 2; }
 .page-header { margin-bottom: 3rem; display: flex; flex-direction: column; gap: 0.75rem; }
-#page-title { font-size: 3rem; font-weight: 900; color: var(--text-primary); text-transform: uppercase; letter-spacing: -0.02em; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+
+#page-title { 
+    font-size: 3rem; font-weight: 900; color: transparent; 
+    text-transform: uppercase; letter-spacing: -0.02em; 
+    background: linear-gradient(to right, #ffffff, #e2e8f0, #9d4edd, #ffffff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: shimmerText 5s linear infinite;
+    text-shadow: 0 4px 30px rgba(157, 78, 221, 0.3); 
+}
+@keyframes shimmerText {
+    to { background-position: 200% center; }
+}
+
 .page-subtitle { color: var(--text-secondary); font-size: 1.15rem; font-weight: 500; }
 .header-controls { margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
 
