@@ -64,6 +64,7 @@ const btnRefreshInbox = document.getElementById('btn-refresh-inbox');
 
 // --- Initialization ---
 async function init() {
+    renderSoundwave();
     renderSidebar();
     populateCategoryDropdowns();
     updateAuthUI();
@@ -474,6 +475,28 @@ function setupEventListeners() {
     window.addEventListener('click', (e) => {
         if (e.target.classList.contains('modal')) hideModals();
     });
+}
+
+function renderSoundwave() {
+    const bg = document.getElementById('soundwave-bg');
+    if (!bg) return;
+    for (let i = 0; i < 40; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'soundwave-bar';
+        
+        // Organic randomization for equalizer
+        const minHeight = Math.random() * 10 + 2; 
+        const maxHeight = Math.random() * 30 + 15; 
+        const duration = Math.random() * 0.8 + 0.6; 
+        const delay = Math.random() * -2; 
+        
+        bar.style.height = `${minHeight}vh`;
+        bar.style.setProperty('--max-height', `${maxHeight}vh`);
+        bar.style.animationDuration = `${duration}s`;
+        bar.style.animationDelay = `${delay}s`;
+        
+        bg.appendChild(bar);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', init);

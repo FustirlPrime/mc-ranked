@@ -38,50 +38,25 @@ body {
     min-height: 100vh;
 }
 
-/* Synthwave Background System */
-.synthwave-bg {
+/* Soundwave Live Background */
+.soundwave-bg {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
     z-index: 0; pointer-events: none; overflow: hidden;
-    background: linear-gradient(to bottom, #0f0c29 0%, #302b63 45%, #180a2b 55%, #050507 100%);
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 0 2vw; gap: 8px;
+    background: radial-gradient(circle at 50% 100%, #1a0b2e, #050507);
 }
-.synth-stars {
-    position: absolute; top: 0; left: 0; width: 100%; height: 55%;
-    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px);
-    background-size: 150px 150px; opacity: 0.4;
-    animation: twinkle 4s ease-in-out infinite alternate;
+.soundwave-bar {
+    flex: 1; max-width: 30px;
+    background: linear-gradient(to top, rgba(157, 78, 221, 0.5), rgba(157, 78, 221, 0.05));
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+    animation: soundGlow 1.2s ease-in-out infinite alternate;
+    height: 10vh; /* Default fallback */
 }
-@keyframes twinkle {
-    from { opacity: 0.2; transform: translateY(0); }
-    to { opacity: 0.6; transform: translateY(1px); }
-}
-.synth-sun {
-    position: absolute; top: 20%; left: 50%; width: 400px; height: 400px;
-    margin-left: -200px; border-radius: 50%;
-    background: linear-gradient(to bottom, #ffea00 0%, #ff0055 80%);
-    box-shadow: 0 0 120px rgba(255, 0, 85, 0.7), inset 0 0 40px rgba(255, 234, 0, 0.5);
-    animation: sunPulse 4s infinite alternate;
-    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
-}
-@keyframes sunPulse {
-    from { box-shadow: 0 0 100px rgba(255,0,85,0.7), inset 0 0 40px rgba(255, 234, 0, 0.5); }
-    to { box-shadow: 0 0 150px rgba(255,0,85,1), inset 0 0 60px rgba(255, 234, 0, 0.8); }
-}
-.synth-grid {
-    position: absolute; top: 55%; left: -50%; width: 200%; height: 100%;
-    background-image: 
-        linear-gradient(rgba(216, 112, 255, 0.6) 2px, transparent 2px),
-        linear-gradient(90deg, rgba(216, 112, 255, 0.6) 2px, transparent 2px);
-    background-size: 60px 60px;
-    transform: perspective(400px) rotateX(70deg);
-    animation: gridMove 2s linear infinite;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 80%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 80%);
-    box-shadow: inset 0 50px 100px rgba(216, 112, 255, 0.2);
-}
-@keyframes gridMove {
-    from { background-position: 0 0; }
-    to { background-position: 0 60px; }
+@keyframes soundGlow {
+    0% { height: 5vh; opacity: 0.3; }
+    100% { height: var(--max-height, 40vh); opacity: 0.8; box-shadow: 0 0 35px rgba(216, 112, 255, 0.6); }
 }
 
 .app-container { display: flex; min-height: 100vh; position: relative; z-index: 1; }
