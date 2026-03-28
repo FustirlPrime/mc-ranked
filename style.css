@@ -31,41 +31,57 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    /* Premium Deep Mesh Gradient Background */
-    background: radial-gradient(circle at 15% 50%, #1a0b2e, transparent 50%),
-                radial-gradient(circle at 85% 30%, #0d1226, transparent 50%),
-                radial-gradient(circle at 50% 80%, #15091a, transparent 50%),
-                #050507;
-    background-size: 200% 200%;
-    animation: backgroundBreath 15s ease infinite alternate;
-    background-attachment: fixed;
+    background: transparent;
     color: var(--text-primary);
     font-family: var(--font-primary);
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
 }
 
-@keyframes backgroundBreath {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* Synthwave Background System */
+.synthwave-bg {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: 0; pointer-events: none; overflow: hidden;
+    background: linear-gradient(to bottom, #0f0c29 0%, #302b63 45%, #180a2b 55%, #050507 100%);
 }
-
-/* Floating Live Orbs */
-.glow-orb {
-    position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0;
-    opacity: 0.35; mix-blend-mode: screen;
-    animation: orbFloat 25s ease-in-out infinite alternate;
+.synth-stars {
+    position: absolute; top: 0; left: 0; width: 100%; height: 55%;
+    background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 2px);
+    background-size: 150px 150px; opacity: 0.4;
+    animation: twinkle 4s ease-in-out infinite alternate;
 }
-.orb-1 { width: 500px; height: 500px; background: #9d4edd; top: -100px; left: -100px; }
-.orb-2 { width: 400px; height: 400px; background: #0088ff; bottom: -50px; right: 5%; animation-delay: -5s; animation-duration: 30s; }
-.orb-3 { width: 350px; height: 350px; background: #ff003c; top: 30%; left: 30%; animation-delay: -12s; animation-duration: 20s; }
-
-@keyframes orbFloat {
-    0% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(10vw, 15vh) scale(1.1); }
-    66% { transform: translate(-5vw, 25vh) scale(0.9); }
-    100% { transform: translate(15vw, -10vh) scale(1.05); }
+@keyframes twinkle {
+    from { opacity: 0.2; transform: translateY(0); }
+    to { opacity: 0.6; transform: translateY(1px); }
+}
+.synth-sun {
+    position: absolute; top: 20%; left: 50%; width: 400px; height: 400px;
+    margin-left: -200px; border-radius: 50%;
+    background: linear-gradient(to bottom, #ffea00 0%, #ff0055 80%);
+    box-shadow: 0 0 120px rgba(255, 0, 85, 0.7), inset 0 0 40px rgba(255, 234, 0, 0.5);
+    animation: sunPulse 4s infinite alternate;
+    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+}
+@keyframes sunPulse {
+    from { box-shadow: 0 0 100px rgba(255,0,85,0.7), inset 0 0 40px rgba(255, 234, 0, 0.5); }
+    to { box-shadow: 0 0 150px rgba(255,0,85,1), inset 0 0 60px rgba(255, 234, 0, 0.8); }
+}
+.synth-grid {
+    position: absolute; top: 55%; left: -50%; width: 200%; height: 100%;
+    background-image: 
+        linear-gradient(rgba(216, 112, 255, 0.6) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(216, 112, 255, 0.6) 2px, transparent 2px);
+    background-size: 60px 60px;
+    transform: perspective(400px) rotateX(70deg);
+    animation: gridMove 2s linear infinite;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 80%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 80%);
+    box-shadow: inset 0 50px 100px rgba(216, 112, 255, 0.2);
+}
+@keyframes gridMove {
+    from { background-position: 0 0; }
+    to { background-position: 0 60px; }
 }
 
 .app-container { display: flex; min-height: 100vh; position: relative; z-index: 1; }
