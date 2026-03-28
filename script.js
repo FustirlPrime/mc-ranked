@@ -418,6 +418,7 @@ function renderTable(categoryId, searchTerm = '') {
 
         const card = document.createElement('div');
         card.className = 'player-card';
+        card.style.animationDelay = `${index * 0.05}s`;
         card.innerHTML = `
             <div class="rank-box ${rankClass}">${index + 1}.</div>
             
