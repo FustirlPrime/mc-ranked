@@ -14,8 +14,17 @@
     <div id="soundwave-bg" class="soundwave-bg"></div>
 
     <div class="app-container">
+        <!-- Mobile Header (Visible only on small screens) -->
+        <div class="mobile-header glass-panel">
+            <div class="logo-3d mobile-logo">
+                <div class="lw"><span class="base qb">MC</span><span class="base qc">MC</span></div>
+                <div class="lw"><span class="base ab">RANKED</span><span class="base ac">RANKED</span></div>
+            </div>
+            <button id="mobile-menu-btn" class="menu-btn">☰</button>
+        </div>
+
         <!-- Sidebar Navigation -->
-        <aside class="sidebar glass-panel">
+        <aside class="sidebar glass-panel" id="sidebar">
             <div class="brand" style="text-align: center; margin-bottom: 0.5rem;">
                 <div class="logo-3d">
                     <div class="lw"><span class="base qb">MC</span><span class="base qc">MC</span></div>
@@ -61,6 +70,8 @@
                 <a href="#docs" class="footer-link">API Docs</a>
             </div>
         </aside>
+        
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
         <!-- Main Content Area -->
         <main class="main-content">
